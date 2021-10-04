@@ -7,24 +7,48 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(haven)
+library(ggplot2)
+library(ggrepel)
 ```
 
-## R Markdown
+## Fiscal decentralization across countries
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r loading imfdata}
+imf_fd <- read_dta('Data/Fiscal Decentralization STATA File - 2020 GFS Database Vintage (2).dta') 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r imfcleaning_graph1}
+imf_fd_graph1 <- imf_fd %>%
+  filter(year==2019) %>%
+  select(country, sd_sng, rd_sng) %>%
+  filter(country== "United States" | country== "Canada" |country== "New Zealand" | country=="Australia")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r imfgraph1}
+
+imf_fd_graph1 %>% ## alternatively can take mean across years and do more countries using facet?
+  ggplot() +
+geom_col(mapping = aes(x = country, y = sd_sng, fill=country), position="dodge")+
+  theme_classic() + 
+  xlab("Countries") + 
+  labs(caption="The data comes from the IMF subnational finance database") +
+  labs(title = "Comparison of tax revenue and expenditure decentralisation in 4 countries", subtitle="2019", fill="")
+  
+```
+
+
+
+```{r loading qogdata}
+qog_en <- read_dta('Data/qog_std_ts_jan21.dta') 
+
+```
+
+```{r regions_oecs}
+regions_oecs <- read_csv('02-Source/REGION_SOCIAL_03102021202926451.csv') 
+```
+
+## Something merged??
+
