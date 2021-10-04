@@ -36,7 +36,8 @@ geom_col(mapping = aes(x = country, y = sd_sng, fill=country), position="dodge")
   xlab("Countries") + 
   labs(caption="The data comes from the IMF subnational finance database") +
   labs(title = "Comparison of tax revenue and expenditure decentralisation in 4 countries", subtitle="2019", fill="")
-  
+ 
+# center title, remove 0? , variable name
 ```
 
 ## Tax autonomy in OECD countries - or Spain over time?
@@ -56,12 +57,15 @@ imf_fd_graph2 %>%
 geom_line(mapping = aes(x = year, y = sd_sng), color="blue")+
   geom_line(mapping = aes(x = year, y = rd_sng), color="dark green")+
     geom_line(mapping = aes(x = year, y = taxd_sng), color="red")+
+  geom_point(mapping = aes(x = year, y = taxd_sng)) + # change size and color
   theme_classic() + 
   xlab("Years") + 
   ylab("Types of decentralization") +
   labs(caption="The data comes from the IMF subnational finance database") +
   labs(title = "Decentralization trends in Spain over time", subtitle="from 1980 to 2019", fill="")
-````
+
+## add scales (breaks) - ask if it counts, add legend
+```
 
 
 ## Some environmental (e.g. energy or CO2)
@@ -82,12 +86,14 @@ owid_energy_graph1 <- owid_energy %>%
 owid_energy_graph1 %>%
     ggplot() +
   geom_point(mapping = aes(x = population, y = renewables_share_energy)) +
-  geom_text_repel(aes(x=population, y=renewables_share_energy, label=country), size=3) +
+  geom_text_repel(aes(x=population, y=renewables_share_energy, label=country), size=3) + # only label 5 countries
   theme_classic() + 
   xlab("Population (log)") + 
   ylab("Share of renewable energy") +
   labs(caption="The data comes from the Our World In Data environmental database") +
   labs(title = "Relationship between country population and sare of renewable energy", subtitle="in 2019", fill="")
+
+# remove 2020, check if missings, increasing max.overlaps, interpret log
 ```
 
 ```{r loading qogdata}
