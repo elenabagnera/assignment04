@@ -63,6 +63,33 @@ geom_line(mapping = aes(x = year, y = sd_sng), color="blue")+
   labs(title = "Decentralization trends in Spain over time", subtitle="from 1980 to 2019", fill="")
 ````
 
+
+## Some environmental (e.g. energy or CO2)
+
+```{r owid_data}
+owid_energy <- read_csv('https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv') 
+```
+
+```{r owid_cleaning}
+owid_energy_graph1 <- owid_energy %>%
+  filter(year>=2019) %>%
+  select(country, year, population, renewables_share_energy) %>% # also need to remove regions
+  mutate(population=log(population)) # also need to rename it
+```
+
+
+```{r owid_graph1}
+owid_energy_graph1 %>%
+    ggplot() +
+  geom_point(mapping = aes(x = population, y = renewables_share_energy)) +
+  geom_text_repel(aes(x=population, y=renewables_share_energy, label=country), size=3) +
+  theme_classic() + 
+  xlab("Population (log)") + 
+  ylab("Share of renewable energy") +
+  labs(caption="The data comes from the Our World In Data environmental database") +
+  labs(title = "Relationship between country population and sare of renewable energy", subtitle="in 2019", fill="")
+```
+
 ```{r loading qogdata}
 qog_en <- read_dta('Data/qog_std_ts_jan21.dta') 
 
