@@ -39,7 +39,29 @@ geom_col(mapping = aes(x = country, y = sd_sng, fill=country), position="dodge")
   
 ```
 
+## Tax autonomy in OECD countries - or Spain over time?
 
+```{r imfcleaning_graph2}
+imf_fd_graph2 <- imf_fd %>%
+  filter(country=="Spain") %>%
+  filter(year>=1980) %>%
+  select(country, year, sd_sng, rd_sng, taxd_sng) 
+```
+
+
+```{r imfgraph2}
+
+imf_fd_graph2 %>% 
+  ggplot() +
+geom_line(mapping = aes(x = year, y = sd_sng), color="blue")+
+  geom_line(mapping = aes(x = year, y = rd_sng), color="dark green")+
+    geom_line(mapping = aes(x = year, y = taxd_sng), color="red")+
+  theme_classic() + 
+  xlab("Years") + 
+  ylab("Types of decentralization") +
+  labs(caption="The data comes from the IMF subnational finance database") +
+  labs(title = "Decentralization trends in Spain over time", subtitle="from 1980 to 2019", fill="")
+````
 
 ```{r loading qogdata}
 qog_en <- read_dta('Data/qog_std_ts_jan21.dta') 
