@@ -105,11 +105,15 @@ owid_energy_graph1 %>%
   geom_text_repel(aes(x=population, y=renewables_share_energy, label=country), size=3) + # only label 5 countries
   theme_classic() + 
   xlab("Population (log)") + 
-  ylab("Share of renewable energy") +
-  labs(caption="The data comes from the Our World In Data environmental database") +
-  labs(title = "Relationship between country population and sare of renewable energy", subtitle="in 2019", fill="")
+  ylab("% of renewable energy in energy mix") +
+  labs(caption="The data comes from the Our World In Data environmental database: https://ourworldindata.org/renewable-energy") +
+  labs(title = "Relationship between country population and sare of renewable energy", subtitle="in 2019", fill="") +
+  theme(plot.caption = element_text(hjust = 0, face= "italic"), 
+        plot.title.position = "plot", 
+        plot.caption.position =  "plot") 
 
-# remove 2020, check if missings, increasing max.overlaps, interpret log
+
+# increasing max.overlaps, interpret log
 ```
 
 ```{r loading qogdata}
