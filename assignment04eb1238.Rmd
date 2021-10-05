@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(haven)
-library(ggplot2)
 library(ggrepel)
 ```
 
@@ -113,16 +112,12 @@ owid_energy_graph1 %>%
         plot.caption.position =  "plot") 
 
 
-# increasing max.overlaps, interpret log
+# increasing max.overlaps, interpret log. Remove regions, only highlight some countries
 ```
 
 ```{r loading qogdata}
 qog_en <- read_dta('Data/qog_std_ts_jan21.dta') 
 
-```
-
-```{r regions_oecs}
-regions_oecs <- read_csv('02-Source/REGION_SOCIAL_03102021202926451.csv') 
 ```
 
 ## Something merged??
