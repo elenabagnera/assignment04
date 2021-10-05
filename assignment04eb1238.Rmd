@@ -120,5 +120,10 @@ qog_en <- read_dta('Data/qog_std_ts_jan21.dta')
 
 ```
 
-## Something merged??
+## Something merged/ a map?
+
+```{r loading qogdata}
+qog_en <- read_dta('Data/qog_std_ts_jan21.dta') 
+
+```
 
