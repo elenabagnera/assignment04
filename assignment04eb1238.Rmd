@@ -24,20 +24,30 @@ imf_fd <- read_dta('Data/Fiscal Decentralization STATA File - 2020 GFS Database 
 imf_fd_graph1 <- imf_fd %>%
   filter(year==2019) %>%
   select(country, sd_sng, rd_sng) %>%
-  filter(country== "United States" | country== "Canada" |country== "New Zealand" | country=="Australia")
+  filter(country== "United States" | country== "Canada" |country== "New Zealand" | country=="Australia") %>%
+  pivot_longer(
+cols = c(sd_sng, rd_sng),
+names_to = "FD_type",
+values_to = "value"
+  )
 ```
 
 ```{r imfgraph1}
 
-imf_fd_graph1 %>% ## alternatively can take mean across years and do more countries using facet?
+imf_fd_graph1 %>% 
   ggplot() +
-geom_col(mapping = aes(x = country, y = sd_sng, fill=country), position="dodge")+
+geom_col(mapping = aes(x = country, y = value, fill=FD_type), position="dodge")+
   theme_classic() + 
   xlab("Countries") + 
-  labs(caption="The data comes from the IMF subnational finance database") +
-  labs(title = "Comparison of tax revenue and expenditure decentralisation in 4 countries", subtitle="2019", fill="")
- 
-# center title, remove 0? , variable name
+  ylab("% decentralized spending and revenue") +
+  labs(caption="The data comes from the IMF fiscal decentralization database: https://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
+  labs(title = "Proportion of spending and revenue devolved to subnational governments", subtitle="2019: Australia, Canada, New Zealand, United States") +
+ scale_fill_discrete(name = "Decentralization type", labels = c("Revenue decentralization", "Spending decentralization")) +
+  theme(plot.caption = element_text(hjust = 0, face= "italic"), 
+        plot.title.position = "plot", 
+        plot.caption.position =  "plot") 
+
+# center title, change scale?
 ```
 
 ## Tax autonomy in OECD countries - or Spain over time?
