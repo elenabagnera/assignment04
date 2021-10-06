@@ -131,15 +131,18 @@ owid_energy_graph1 %>%
 # make sure clear which countries
 ```
 
-```{r loading qogdata}
-qog_en <- read_dta('Data/qog_std_ts_jan21.dta') 
-
-```
-
 ## Something merged/ a map?
 
-```{r loading qogdata}
-qog_en <- read_dta('Data/qog_std_ts_jan21.dta') 
+```{r owid_cleaninggraph2}
+
+qog_env <- read_dta('Data/qog_std_ts_jan21.dta') 
 
 ```
-
+    ```
+    
+    ```{r owid_graph2}
+    
+    
+    ```
+    
+    
