@@ -103,7 +103,7 @@ owid_energy_graph1 <- owid_energy %>%
     !country %in% regions) %>%
   select(country, year, population, renewables_share_energy) 
 
-regions <- c("North America", "Europe", "Asia", "World", "Africa")
+regions <- c("North America", "Europe", "Asia Pacific", "Africa", "South & Central America", "Other South America", "Other North America", "Other Asia & Pacific", "Europe (other)", "Other Southern Africa", "Other Northern Africa", "Other South America", "Other Southern Africa")
 
 highlights <- owid_energy_graph1 %>%
   filter(country=="China"| country=="India"| country=="United States" | country=="Russia"| country=="Brazil"| country=="Pakistan")
@@ -116,7 +116,7 @@ highlights <- owid_energy_graph1 %>%
 owid_energy_graph1 %>%
     ggplot() +
   geom_point(mapping = aes(x = population, y = renewables_share_energy), color="dark green") +
-  geom_text_repel(data=highlights, aes(x=population, y=renewables_share_energy, label=country), size=3) + # only label 5 countries
+  geom_text_repel(data=highlights, aes(x=population, y=renewables_share_energy, label=country), size=3) + 
   theme_classic() + 
   xlab("Population") + 
   ylab("% of renewables in energy mix") +
@@ -131,18 +131,42 @@ owid_energy_graph1 %>%
 # make sure clear which countries
 ```
 
-## Something merged/ a map?
+## Types of renewable energy
 
-```{r owid_cleaninggraph2}
+```{r owid_cleaning2}
+main_econ <-c("Japan", "United States", "China", "India", "Germany", "United Kingdom")
 
-qog_env <- read_dta('Data/qog_std_ts_jan21.dta') 
+owid_energy_graph2 <- owid_energy %>%
+  filter(year==2019, country %in% main_econ) %>%
+  select(country, wind_share_energy, solar_share_energy, hydro_share_energy, biofuel_share_energy, other_renewables_share_energy) %>%
+  pivot_longer(
+cols = c(wind_share_energy, solar_share_energy, hydro_share_energy, biofuel_share_energy, other_renewables_share_energy),
+names_to = "renewable_type",
+values_to = "value"
+  ) 
 
 ```
+    
+    ```{r owid_graph4}
+
+   owid_energy_graph2 %>%
+      ggplot() +
+      geom_col(mapping = aes(x = country, y = value, fill=renewable_type), position="dodge") +
+        theme_classic() + 
+        xlab("Countries") + 
+        ylab("% of energy type in energy mix") +
+        labs(caption="The data comes from the Our World In Data environmental database:\nhttps://ourworldindata.org/renewable-energy") +
+        labs(title = "Hydroelectric and wind energy are the main renewables in largest economies", subtitle="Our World in Data, 2019") +
+      coord_flip() +
+  theme(plot.caption = element_text(hjust = 0, face= "italic"), 
+        plot.title.position = "plot", 
+        plot.caption.position =  "plot") +
+      scale_fill_discrete(name = "Type of renewabke", labels = c("Biofuel", "Hydroelectric", "Other", "Solar", "Wind")) +
+      scale_y_continuous(labels = scales::percent)
+
+      # remove x label, add percentages to bars
     ```
     
-    ```{r owid_graph2}
-    
-    
-    ```
+  
     
     
