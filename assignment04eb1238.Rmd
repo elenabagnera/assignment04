@@ -40,7 +40,7 @@ values_to = "value"
 imf_fd_graph1 %>% 
   ggplot() +
   geom_col(mapping = aes(x = country, y = value, fill=FD_type), position="dodge")+
-  theme_bw() + 
+  theme_classic() + 
   xlab("Countries") + 
   ylab("% decentralized spending and revenue") +
   labs(caption="The data comes from the IMF fiscal decentralization database:\nhttps://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
