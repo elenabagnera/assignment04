@@ -43,8 +43,8 @@ imf_fd_graph1 %>%
   theme_classic() + 
   xlab("Countries") + 
   ylab("% decentralized spending and revenue") +
-  labs(caption="The data comes from the IMF fiscal decentralization database:\nhttps://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
-  labs(title = "Spending is more decentralized than tax revenue in former colonies of the British Empire", subtitle="2019") +
+  labs(caption="https://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
+  labs(title = "Spending is more decentralized than tax revenue in former colonies of the British Empire", subtitle="IMF fiscal Decentralization Database, 2019") +
  scale_fill_discrete(name = "Decentralization type", labels = c("Revenue decentralization", "Spending decentralization")) +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
@@ -82,8 +82,8 @@ geom_line(mapping = aes(x = year, y = value, color=FD_type), size=1, alpha= 0.8)
   theme_classic() + 
   xlab("Years") + 
   ylab("% of decentralization") +
-  labs(caption="The data comes from the IMF fiscal decentralization database:\nhttps://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
-  labs(title = "Spain has undergone radical decentralization reforms", subtitle="From 1980 to 2019", fill="") +
+  labs(caption="https://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
+  labs(title = "Spain has undergone radical decentralization reforms", subtitle="IMF Fiscal Decentralization databse, 1980-2019", fill="") +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
         plot.caption.position =  "plot")  +
@@ -110,10 +110,10 @@ owid_energy_graph1 <- owid_energy %>%
     !country %in% regions) %>%
   select(country, year, population, renewables_share_energy) 
 
-regions <- c("North America", "Europe", "Asia Pacific", "Africa", "South & Central America", "Other South America", "Other North America", "Other Asia & Pacific", "Europe (other)", "Other Southern Africa", "Other Northern Africa", "Other South America", "Other Southern Africa")
+regions <- c("North America", "Europe", "Asia Pacific", "Africa", "South & Central America", "Other South America", "Other North America", "Other Asia & Pacific", "Europe (other)", "Other Southern Africa", "Other Northern Africa", "Other South America", "Other Southern Africa", "World")
 
 highlights <- owid_energy_graph1 %>%
-  filter(country=="China"| country=="India"| country=="United States" | country=="Russia"| country=="Brazil"| country=="Pakistan")
+  filter(country=="China"| country=="India"| country=="United States" | country=="Russia"| country=="Brazil"| country=="Pakistan"| country=="Bangladesh" | country=="Indonesia")
 
 
 ```
@@ -122,8 +122,8 @@ highlights <- owid_energy_graph1 %>%
 ```{r owid_graph1}
 owid_energy_graph1 %>%
     ggplot() +
-  geom_point(mapping = aes(x = population, y = renewables_share_energy), color="dark green") +
-  geom_text_repel(data=highlights, aes(x=population, y=renewables_share_energy, label=country), size=3) + 
+  geom_point(mapping = aes(x = population, y = renewables_share_energy), size=1.5, color="dark green") +
+  geom_label_repel(data=highlights, aes(x=population, y=renewables_share_energy, label=country), size=3, box.padding = 0.5, max.overlaps=Inf) + 
   theme_classic() + 
   xlab("Population") + 
   ylab("% of renewables in energy mix") +
@@ -134,8 +134,6 @@ owid_energy_graph1 %>%
         plot.caption.position =  "plot")+
   scale_x_log10(labels=scales::comma)
 
-
-# make sure clear which countries
 ```
 
 ## Types of renewable energy
@@ -163,13 +161,13 @@ values_to = "value"
         xlab("Countries") + 
         ylab("% of energy type in energy mix") +
         labs(caption="The data comes from the Our World In Data environmental database:\nhttps://ourworldindata.org/renewable-energy") +
-        labs(title = "Hydroelectric and wind energy are the main renewables in largest economies", subtitle="Our World in Data, 2019") +
+        labs(title = "Wind and hydroelectric energy are the main renewables in largest economies", subtitle="Our World in Data, 2019") +
       coord_flip() +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
         plot.caption.position =  "plot") +
-      scale_fill_discrete(name = "Type of renewabke", labels = c("Biofuel", "Hydroelectric", "Other", "Solar", "Wind")) +
-      scale_y_continuous(labels = scales::percent)
+      scale_fill_discrete(name = "Type of renewable", labels = c("Biofuel", "Hydroelectric", "Other", "Solar", "Wind")) +
+      scale_y_continuous()
 
       # remove x label, add percentages to bars
     ```
