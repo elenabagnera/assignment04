@@ -60,8 +60,9 @@ imf_fd_graph2 <- imf_fd %>%
   filter(country=="Spain") %>%
   filter(year>=1980) %>%
   select(country, year, sd_sng, rd_sng, taxd_sng) %>%
+  rename("Spending"=sd_sng, "Tax revenue"=taxd_sng, "Total revenue"=rd_sng) %>%
   pivot_longer(
-cols = c(sd_sng, rd_sng, taxd_sng),
+cols = c("Spending", "Total revenue", "Tax revenue"),
 names_to = "FD_type",
 values_to = "value"
   ) 
@@ -70,21 +71,27 @@ values_to = "value"
 
 ```{r imf_graph2}
 
+labels <- c("Decentralized tax revenue", "Decentralized revenue", "Decentralized spending")
+library(directlabels)
+
 imf_fd_graph2 %>% 
 ggplot() +
 geom_line(mapping = aes(x = year, y = value, color=FD_type), size=1, alpha= 0.8) +
-  geom_point(mapping = aes(x = year, y = value), size=0.8, color="dark blue") + 
+  geom_point(mapping = aes(x = year, y = value), size=0.7, color="dark blue") + 
+  geom_dl(aes(x=year, y=value, label=FD_type, color=FD_type), method = list(dl.trans(x = x + .3), "last.bumpup")) +
   theme_classic() + 
   xlab("Years") + 
-  ylab("Degree of decentralization") +
+  ylab("% of decentralization") +
   labs(caption="The data comes from the IMF fiscal decentralization database:\nhttps://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
   labs(title = "Spain has undergone radical decentralization reforms", subtitle="From 1980 to 2019", fill="") +
- scale_color_discrete(name = "Decentralization type", labels = c("Revenue decentralization", "Spending decentralization", "Tax revenue decentralization")) +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
         plot.caption.position =  "plot")  +
-  scale_y_continuous(labels = scales::percent_format(accuracy=1), limits=c(0, 0.5))
-##  geom_text or annotate to remove legend and add lines
+  scale_y_continuous(labels = scales::percent_format(accuracy=1), limits=c(0, 0.5)) +
+  coord_cartesian(clip = 'off') +
+  theme(legend.position = 'none',
+  plot.margin = margin(0.1, 2.6, 0.1, 0.1, "cm"))
+
 ```
 
 
