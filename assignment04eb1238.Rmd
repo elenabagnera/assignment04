@@ -13,6 +13,8 @@ library(ggrepel)
 library(scales)
 ```
 
+*Notice: you can access my GitHub folder here: https://github.com/elenabagnera/assignment04 *
+
 ## 1) Spending & tax revenue decentralization
 
 Federal countries tend to be the most fiscally decentralized countries. The graph shows that in these, expenditure is more decentralized to subnational governments than tax revenue is. For example, in Canada, about 67% of the total public expenditure comes from subnational governments (including local and states), while only about 55% of the total tax revenue is raised subnationally. This is not a surprising trend as the difference between the two types of decentralization represents subnational level intergovernmental transfers and subnational borrowing, both of which are common practice in federal states.
