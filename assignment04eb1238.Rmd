@@ -13,7 +13,7 @@ library(ggrepel)
 library(scales)
 ```
 
-## Fiscal decentralization across countries
+## Spending & tax revenue decentralization
 
 ```{r loading imfdata}
 imf_fd <- read_dta('Data/Fiscal Decentralization STATA File - 2020 GFS Database Vintage.dta') 
@@ -44,7 +44,7 @@ imf_fd_graph1 %>%
   xlab("Countries") + 
   ylab("% decentralized spending and revenue") +
   labs(caption="https://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
-  labs(title = "Spending is more decentralized than tax revenue in former colonies of the British Empire", subtitle="IMF fiscal Decentralization Database, 2019") +
+  labs(title = "Spending is more decentralized than tax revenue \n in former colonies of the British Empire", subtitle="IMF fiscal Decentralization Database, 2019") +
  scale_fill_discrete(name = "Decentralization type", labels = c("Revenue decentralization", "Spending decentralization")) +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
@@ -53,7 +53,7 @@ imf_fd_graph1 %>%
 
 ```
 
-## Decentralization trends in Spain over time
+## Spain's decentralization trends  
 
 ```{r imfcleaning_graph2}
 imf_fd_graph2 <- imf_fd %>%
@@ -95,13 +95,15 @@ geom_line(mapping = aes(x = year, y = value, color=FD_type), size=1, alpha= 0.8)
 ```
 
 
-## % of renewabe energy & population
+## Renewabe energy & country population
 
 ```{r owid_data}
 owid_energy <- read_csv('https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv') 
 ```
 
 ```{r owid_cleaning}
+
+regions <- c("North America", "Europe", "Asia Pacific", "Africa", "South & Central America", "Other South America", "Other North America", "Other Asia & Pacific", "Europe (other)", "Other Southern Africa", "Other Northern Africa", "Other South America", "Other Southern Africa", "World")
 
 owid_energy_graph1 <- owid_energy %>%
   filter(
@@ -110,7 +112,6 @@ owid_energy_graph1 <- owid_energy %>%
     !country %in% regions) %>%
   select(country, year, population, renewables_share_energy) 
 
-regions <- c("North America", "Europe", "Asia Pacific", "Africa", "South & Central America", "Other South America", "Other North America", "Other Asia & Pacific", "Europe (other)", "Other Southern Africa", "Other Northern Africa", "Other South America", "Other Southern Africa", "World")
 
 highlights <- owid_energy_graph1 %>%
   filter(country=="China"| country=="India"| country=="United States" | country=="Russia"| country=="Brazil"| country=="Pakistan"| country=="Bangladesh" | country=="Indonesia")
@@ -136,7 +137,7 @@ owid_energy_graph1 %>%
 
 ```
 
-## Types of renewable energy
+## Renewable energy types
 
 ```{r owid_cleaning2}
 main_econ <-c("Japan", "United States", "China", "India", "Germany", "United Kingdom")
@@ -152,9 +153,9 @@ values_to = "value"
 
 ```
     
-    ```{r owid_graph4}
-
-   owid_energy_graph2 %>%
+```{r owid_graph4}
+    
+    owid_energy_graph2 %>%
       ggplot() +
       geom_col(mapping = aes(x = country, y = value, fill=renewable_type), position="dodge") +
         theme_classic() + 
@@ -168,10 +169,4 @@ values_to = "value"
         plot.caption.position =  "plot") +
       scale_fill_discrete(name = "Type of renewable", labels = c("Biofuel", "Hydroelectric", "Other", "Solar", "Wind")) +
       scale_y_continuous()
-
-      # remove x label, add percentages to bars
-    ```
-    
-  
-    
-    
+```
