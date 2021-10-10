@@ -6,29 +6,31 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, show_col_types = FALSE)
 library(tidyverse)
 library(haven)
 library(ggrepel)
 library(scales)
 ```
 
-## Spending & tax revenue decentralization
+## 1) Spending & tax revenue decentralization
 
-```{r loading imfdata}
+Federal countries tend to be the most fiscally decentralized countries. The graph shows that in these, expenditure is more decentralized to subnational governments than tax revenue is. For example, in Canada, about 67% of the total public expenditure comes from subnational governments (including local and states), while only about 55% of the total tax revenue is raised subnationally. This is not a surprising trend as the difference between the two types of decentralization represents subnational level intergovernmental transfers and subnational borrowing, both of which are common practice in federal states.
+
+```{r loading imfdata, echo=FALSE}
 imf_fd <- read_dta('Data/Fiscal Decentralization STATA File - 2020 GFS Database Vintage.dta') 
 
 ```
 
 ```{r imfcleaning_graph1}
 
-countries <- c("United States", "Canada", "New Zealand", "Australia")
+countries <- c("United States", "Canada", "Switzerland", "Australia", "Germany", "Brazil") #selecting countries for my analysis
 
-imf_fd_graph1 <- imf_fd %>%
-  filter(year==2019) %>%
+imf_fd_graph1 <- imf_fd %>% 
+  filter(year==2018) %>%
   select(country, sd_sng, rd_sng) %>%
   filter(country %in% countries) %>%
-  pivot_longer(
+  pivot_longer( 
 cols = c(sd_sng, rd_sng),
 names_to = "FD_type",
 values_to = "value"
@@ -44,7 +46,7 @@ imf_fd_graph1 %>%
   xlab("Countries") + 
   ylab("% decentralized spending and revenue") +
   labs(caption="https://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
-  labs(title = "Spending is more decentralized than tax revenue \n in former colonies of the British Empire", subtitle="IMF fiscal Decentralization Database, 2019") +
+  labs(title = "Spending is more decentralized than tax revenue in federal countries", subtitle="IMF fiscal Decentralization Database (2018)") +
  scale_fill_discrete(name = "Decentralization type", labels = c("Revenue decentralization", "Spending decentralization")) +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
@@ -53,7 +55,11 @@ imf_fd_graph1 %>%
 
 ```
 
-## Spain's decentralization trends  
+## 2) Spain's decentralization trends  
+
+Spain is often regarded as the European country that has undergone most radical decentralization reforms. This graph shows an upward trend in all types of fiscal decentralization in the country from the 1980s' until 2018. For instance, in 1980. about 17% of tax revenue was concentrated in subnational governments, while in 2018 this rose to 37%. Total revenue and spending follow a similar pattern, going from 11% to 26% and 33% to 44% respectively (data for spending is available from 2010-2018). 
+
+This suggests that Spain could be an interesting case study country given the amount of variation from year to year. This chart also draws attention to possible exogenous shocks to decentralization reforms. For instance, from 2010 to 2012, both decentralized tax and total revenue saw a fast increase by about 5 percentage points, while spending dropped at the same time. This could reflect the consequences of austerity measures adopted after the 2008 financial crisis and could be a further topic of exploration.
 
 ```{r imfcleaning_graph2}
 imf_fd_graph2 <- imf_fd %>%
@@ -83,7 +89,7 @@ geom_line(mapping = aes(x = year, y = value, color=FD_type), size=1, alpha= 0.8)
   xlab("Years") + 
   ylab("% of decentralization") +
   labs(caption="https://data.imf.org/?sk=1C28EBFB-62B3-4B0C-AED3-048EEEBB684F") +
-  labs(title = "Spain has undergone radical decentralization reforms", subtitle="IMF Fiscal Decentralization databse, 1980-2019", fill="") +
+  labs(title = "Spain has undergone radical decentralization reforms", subtitle="IMF Fiscal Decentralization database (1980-2018)", fill="") +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
         plot.caption.position =  "plot")  +
@@ -95,15 +101,18 @@ geom_line(mapping = aes(x = year, y = value, color=FD_type), size=1, alpha= 0.8)
 ```
 
 
-## Renewabe energy & country population
+## 3) Renewabe energy & country population
 
-```{r owid_data}
+This graph shows a weak negative correlation between the population of a country and  its percentage of renewables in the energy mix. The energy systems of the most populous countries in the world, tend to have a low renewable energy share, suggesting that they are lagging behind in the energy transition. One exception seems to be Brazil, which despite being among the top 8 most populous countries, in 2019, 45% of its energy mix was made up of renewables. 
+
+
+```{r owid_data, echo=FALSE, message = FALSE}
 owid_energy <- read_csv('https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv') 
 ```
 
 ```{r owid_cleaning}
 
-regions <- c("North America", "Europe", "Asia Pacific", "Africa", "South & Central America", "Other South America", "Other North America", "Other Asia & Pacific", "Europe (other)", "Other Southern Africa", "Other Northern Africa", "Other South America", "Other Southern Africa", "World")
+regions <- c("North America", "Europe", "Asia Pacific", "Africa", "South & Central America", "Other South America", "Other North America", "Other Asia & Pacific", "Europe (other)", "Other Southern Africa", "Other Northern Africa", "Other South America", "Other Southern Africa", "World") #listing regions to be able to remove them from the data
 
 owid_energy_graph1 <- owid_energy %>%
   filter(
@@ -128,7 +137,7 @@ owid_energy_graph1 %>%
   theme_classic() + 
   xlab("Population") + 
   ylab("% of renewables in energy mix") +
-  labs(caption="The data comes from the Our World In Data environmental database:\nhttps://ourworldindata.org/renewable-energy") +
+  labs(caption="https://ourworldindata.org/renewable-energy") +
   labs(title = "The most populous countries tend to have a low renewable levels in energy mix", subtitle="Our World in Data (2019)", fill="") +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
@@ -137,7 +146,9 @@ owid_energy_graph1 %>%
 
 ```
 
-## Renewable energy types
+## 4)Renewable energy types
+
+The graph shows heterogeneity in the renewable mix of the world's largest economies. For example, wind energy is prevalent in the United Kingdom, Germany and the United States, while hydroelectric power is prevalent in China, and India. In japan, on the other hand, the largest share of renewable energy is produced by other sources, which include geothermal and tidal energy. Solar is also prevalent in Japan, unlike in other countries. Across most countries, however, biofuel seems to be a minor source of renewable energy.
 
 ```{r owid_cleaning2}
 main_econ <-c("Japan", "United States", "China", "India", "Germany", "United Kingdom")
@@ -160,13 +171,12 @@ values_to = "value"
       geom_col(mapping = aes(x = country, y = value, fill=renewable_type), position="dodge") +
         theme_classic() + 
         xlab("Countries") + 
-        ylab("% of energy type in energy mix") +
-        labs(caption="The data comes from the Our World In Data environmental database:\nhttps://ourworldindata.org/renewable-energy") +
-        labs(title = "Wind and hydroelectric energy are the main renewables in largest economies", subtitle="Our World in Data, 2019") +
+        ylab("% in total energy mix") +
+        labs(caption="https://ourworldindata.org/renewable-energy") +
+        labs(title = "The renewable energy mix looks different in the world's largest economies", subtitle="Our World in Data(2019)") +
       coord_flip() +
   theme(plot.caption = element_text(hjust = 0, face= "italic"), 
         plot.title.position = "plot", 
         plot.caption.position =  "plot") +
-      scale_fill_discrete(name = "Type of renewable", labels = c("Biofuel", "Hydroelectric", "Other", "Solar", "Wind")) +
-      scale_y_continuous()
+      scale_fill_discrete(name = "Renewable type", labels = c("Biofuel", "Hydroelectric", "Other", "Solar", "Wind"))
 ```
